@@ -2,7 +2,12 @@ import { useMemo, useState, useEffect } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi, platformApi } from '../lib/api'
-import { syncRydPracticeAccount, stashBillingPasswordForSync, rydPracticeApi } from '../lib/rydApi'
+import {
+  resolveLocationDefaults,
+  syncRydPracticeAccount,
+  stashBillingPasswordForSync,
+  rydPracticeApi,
+} from '../lib/rydApi'
 import { useAuth } from '../context/AuthContext'
 import { useAuthLightTheme } from '../hooks/useAuthLightTheme'
 
@@ -20,9 +25,18 @@ export function SignupPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [platformStats, setPlatformStats] = useState({ practiceSets: 0, totalQuestions: 0 })
+  const [locationDefaults, setLocationDefaults] = useState({
+    country: 'United States',
+    state: 'California',
+    timezone: 'UTC',
+  })
 
   useEffect(() => {
     void platformApi.getStats().then(setPlatformStats)
+  }, [])
+
+  useEffect(() => {
+    void resolveLocationDefaults().then((defaults) => setLocationDefaults(defaults))
   }, [])
 
   useEffect(() => {
@@ -72,9 +86,9 @@ export function SignupPage() {
           registerDefaults: {
             firstName: 'Practice',
             lastName: 'Student',
-            country: 'Nigeria',
-            state: 'Lagos',
-            timezone: 'Africa/Lagos',
+            country: locationDefaults.country,
+            state: locationDefaults.state,
+            timezone: locationDefaults.timezone,
           },
         })
       } catch {

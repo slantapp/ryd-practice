@@ -133,6 +133,42 @@ export type PracticeSubscriptionSummary = {
   accessEndsAt: string | null
 }
 
+export type LocationDefaults = {
+  country: string
+  state: string
+  timezone: string
+}
+
+export function inferLocationDefaults(timezoneInput?: string | null): LocationDefaults {
+  const timezone = timezoneInput?.trim() || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
+  if (timezone === 'Africa/Lagos') {
+    return { country: 'Nigeria', state: 'Lagos', timezone }
+  }
+  return { country: 'United States', state: 'California', timezone }
+}
+
+export async function resolveLocationDefaults(): Promise<LocationDefaults> {
+  const fallback = inferLocationDefaults()
+  try {
+    const controller = new AbortController()
+    const timer = window.setTimeout(() => controller.abort(), 1800)
+    const response = await fetch('https://ipapi.co/json/', { signal: controller.signal })
+    window.clearTimeout(timer)
+    if (!response.ok) return fallback
+    const data = (await response.json()) as {
+      country_name?: string
+      region?: string
+      timezone?: string
+    }
+    const timezone = String(data.timezone || fallback.timezone).trim() || fallback.timezone
+    const country = String(data.country_name || fallback.country).trim() || fallback.country
+    const state = String(data.region || fallback.state).trim() || fallback.state
+    return { country, state, timezone }
+  } catch {
+    return fallback
+  }
+}
+
 export const rydPracticeApi = {
   register: async (payload: {
     email: string

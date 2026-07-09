@@ -2,7 +2,15 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import { authApi, studentApi, PRACTICE_SIGNUP_SOURCE } from '../lib/api'
 import { getStoredToken } from '../lib/apiClient'
 import { clearAssignedPracticeId, ensureAssignedPracticeId, getAssignedPracticeId } from '../lib/assignedPracticeFlow'
-import { clearRydToken, getStoredRydToken, stashBillingPasswordForSync, syncRydPracticeAccount, rydPracticeApi, RYD_BILLING_PW_KEY } from '../lib/rydApi'
+import {
+  clearRydToken,
+  getStoredRydToken,
+  inferLocationDefaults,
+  stashBillingPasswordForSync,
+  syncRydPracticeAccount,
+  rydPracticeApi,
+  RYD_BILLING_PW_KEY,
+} from '../lib/rydApi'
 import type { AuthUser, LoginPayload, ProfileExtras } from '../types'
 
 interface AuthContextValue {
@@ -167,6 +175,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         response.student.email?.toLowerCase().endsWith('@ryd-cbt.integration') ||
         Boolean(getAssignedPracticeId())
       if (!isPackageStudent) {
+        const inferred = inferLocationDefaults()
         try {
           const currentUser = JSON.parse(localStorage.getItem(USER_KEY) || 'null') as AuthUser | null
           const extras = readStoredProfileExtras()
@@ -179,16 +188,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                   firstName: currentUser.firstName?.trim() || 'Practice',
                   lastName: currentUser.lastName?.trim() || 'Student',
                   phone: currentUser.phone?.trim() || undefined,
-                  country: extras?.country?.trim() || 'Nigeria',
-                  state: extras?.state?.trim() || 'Lagos',
-                  timezone: extras?.timezone?.trim() || 'Africa/Lagos',
+                  country: extras?.country?.trim() || inferred.country,
+                  state: extras?.state?.trim() || inferred.state,
+                  timezone: extras?.timezone?.trim() || inferred.timezone,
                 }
               : {
                   firstName: 'Practice',
                   lastName: 'Student',
-                  country: 'Nigeria',
-                  state: 'Lagos',
-                  timezone: 'Africa/Lagos',
+                  country: inferred.country,
+                  state: inferred.state,
+                  timezone: inferred.timezone,
                 },
           })
         } catch {

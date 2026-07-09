@@ -16,6 +16,7 @@ import {
 } from '../lib/assignedPracticeFlow'
 import {
   getStoredRydToken,
+  inferLocationDefaults,
   isAdminExplorePracticeUser,
   RYD_BILLING_PW_KEY,
   rydPracticeApi,
@@ -47,13 +48,14 @@ function registerDefaultsFromUser(
   user: { firstName?: string; lastName?: string; phone?: string | null },
   profileExtras: { country?: string; state?: string; timezone?: string } | null,
 ) {
+  const inferred = inferLocationDefaults(profileExtras?.timezone)
   return {
     firstName: user.firstName?.trim() || 'Practice',
     lastName: user.lastName?.trim() || 'Student',
     phone: user.phone?.trim() || undefined,
-    country: profileExtras?.country?.trim() || 'Nigeria',
-    state: profileExtras?.state?.trim() || 'Lagos',
-    timezone: profileExtras?.timezone?.trim() || 'Africa/Lagos',
+    country: profileExtras?.country?.trim() || inferred.country,
+    state: profileExtras?.state?.trim() || inferred.state,
+    timezone: profileExtras?.timezone?.trim() || inferred.timezone,
   }
 }
 
