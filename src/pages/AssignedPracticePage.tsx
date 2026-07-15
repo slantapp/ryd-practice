@@ -145,7 +145,7 @@ function LoadingState() {
   return (
     <div className="assigned-practice-shell mx-auto w-full max-w-3xl animate-pulse">
       <div className="assigned-practice-hero h-52 rounded-t-3xl" />
-      <div className="assigned-practice-body space-y-4 rounded-b-3xl p-8">
+      <div className="assigned-practice-body space-y-4 rounded-b-3xl p-5 sm:p-8">
         <div className="mx-auto h-4 w-32 rounded-full bg-white/10" />
         <div className="mx-auto h-8 w-2/3 rounded-xl bg-white/10" />
         <div className="mx-auto h-4 w-1/2 rounded-full bg-white/10" />
@@ -230,7 +230,7 @@ export function AssignedPracticePage() {
         {loading ? (
           <LoadingState />
         ) : error ? (
-          <section className="assigned-practice-shell w-full max-w-lg rounded-3xl p-8 text-center">
+          <section className="assigned-practice-shell w-full max-w-lg rounded-3xl p-5 text-center sm:p-8">
             <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-rose-500/15 text-rose-300">
               <Sparkles size={24} />
             </div>
@@ -247,17 +247,17 @@ export function AssignedPracticePage() {
         ) : practice ? (
           <article className="assigned-practice-shell w-full max-w-3xl overflow-hidden rounded-3xl shadow-2xl">
             {/* Hero — title, copy, and meta all in one block */}
-            <header className="assigned-practice-hero relative px-6 pb-10 pt-8 sm:px-10 sm:pb-12 sm:pt-10">
+            <header className="assigned-practice-hero relative px-4 pb-8 pt-6 sm:px-10 sm:pb-12 sm:pt-10">
               <PracticeHeroIllustration />
               <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_min(240px,38%)] lg:items-end">
-                <div className="min-w-0 space-y-5 pr-[38%] sm:pr-[32%] lg:pr-0">
+                <div className="min-w-0 space-y-4 pr-12 sm:space-y-5 sm:pr-[32%] lg:pr-0">
                   <div className="assigned-practice-hero-badge inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em]">
                     <Sparkles size={12} />
                     Assigned practice
                   </div>
 
                   <div className="space-y-3">
-                    <h1 className="assigned-practice-hero-title text-3xl font-bold leading-[1.15] sm:text-4xl lg:text-[2.75rem]">
+                    <h1 className="assigned-practice-hero-title text-2xl font-bold leading-[1.15] sm:text-3xl lg:text-[2.75rem]">
                       {practice.name}
                     </h1>
                     <p className="assigned-practice-hero-lead max-w-xl text-[15px] leading-relaxed sm:text-base">

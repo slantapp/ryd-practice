@@ -58,14 +58,14 @@ export function ChangePasswordPage() {
         <motion.section
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="premium-hero-gradient rounded-3xl border p-6"
+          className="premium-hero-gradient rounded-3xl border p-4 sm:p-6"
         >
           <p className="premium-accent text-[11px] uppercase tracking-[0.2em]">Security</p>
-          <h1 className="premium-heading mt-2 text-3xl font-bold">Change password</h1>
+          <h1 className="premium-heading mt-2 text-2xl font-bold sm:text-3xl">Change password</h1>
           <p className="premium-text-muted mt-2 text-sm">Enter your current password, then choose a new one.</p>
         </motion.section>
 
-        <article className="premium-card rounded-2xl border p-6">
+        <article className="premium-card rounded-2xl border p-4 sm:p-6">
           <form className="space-y-5" onSubmit={handleSubmit}>
             <label className="premium-text-muted block text-sm">
               Current password

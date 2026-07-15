@@ -93,10 +93,10 @@ export function DashboardPage() {
           <motion.section
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="premium-hero-gradient relative overflow-hidden rounded-3xl border p-7 shadow-2xl"
+            className="premium-hero-gradient relative overflow-hidden rounded-3xl border p-4 shadow-2xl sm:p-6 md:p-7"
           >
             <p className="premium-accent text-[11px] uppercase tracking-[0.2em]">Learning Dashboard</p>
-            <h1 className="premium-heading mt-2 text-4xl font-bold">{`Welcome back, ${user?.firstName || 'Student'} 👋`}</h1>
+            <h1 className="premium-heading mt-2 text-2xl font-bold sm:text-3xl md:text-4xl">{`Welcome back, ${user?.firstName || 'Student'} 👋`}</h1>
             <p className="premium-text-muted mt-2 max-w-2xl">
               {submitted.length > 0
                 ? `You have completed ${submitted.length} practice session${submitted.length === 1 ? '' : 's'} with an average score of ${averageScore}%.`
@@ -126,7 +126,7 @@ export function DashboardPage() {
             </div>
           </motion.section>
 
-          <section className="mt-5 grid grid-cols-4 gap-3">
+          <section className="mt-5 grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-4">
             {[
               { title: 'Total Sessions', value: attempts.length, trend: `${submitted.length} completed`, icon: BookOpen },
               { title: 'Questions Answered', value: totalAnswered, trend: 'Across completed sets', icon: Target },
@@ -140,14 +140,14 @@ export function DashboardPage() {
               <motion.article
                 key={card.title}
                 whileHover={{ y: -2 }}
-                className="premium-card rounded-2xl border p-4 backdrop-blur-md"
+                className="premium-card rounded-2xl border p-3 backdrop-blur-md sm:p-4"
               >
-                <div className="flex items-center justify-between">
-                  <p className="premium-text-soft text-xs">{card.title}</p>
-                  <card.icon size={15} className="premium-accent" />
+                <div className="flex items-start justify-between gap-2">
+                  <p className="premium-text-soft min-w-0 text-[10px] leading-snug sm:text-xs">{card.title}</p>
+                  <card.icon size={14} className="premium-accent mt-0.5 shrink-0 sm:size-[15px]" />
                 </div>
-                <h3 className="premium-stat mt-2 text-2xl font-bold">{card.value}</h3>
-                <p className="premium-stat-hint mt-1 text-xs">{card.trend}</p>
+                <h3 className="premium-stat mt-1.5 text-xl font-bold sm:mt-2 sm:text-2xl">{card.value}</h3>
+                <p className="premium-stat-hint mt-1 truncate text-[10px] sm:text-xs">{card.trend}</p>
                 <div className="premium-inset mt-3 h-1.5 rounded-full">
                   <motion.div
                     initial={{ width: 0 }}
@@ -160,8 +160,8 @@ export function DashboardPage() {
             ))}
           </section>
 
-          <section className="mt-5 grid grid-cols-2 gap-4">
-            <article className="premium-card rounded-2xl border p-5">
+          <section className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
+            <article className="premium-card rounded-2xl border p-4 sm:p-5">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">Active Learning</h3>
                 <Link to="/practice/attempts" className="premium-accent text-sm">
@@ -204,8 +204,8 @@ export function DashboardPage() {
               </div>
             </article>
 
-            <article className="premium-card rounded-2xl border p-5">
-              <h3 className="text-lg font-semibold">Leaderboard Preview</h3>
+            <article className="premium-card rounded-2xl border p-4 sm:p-5">
+              <h3 className="text-base font-semibold sm:text-lg">Leaderboard Preview</h3>
               <p className="premium-text-soft mt-1 text-sm">Top performers on RYD Practice.</p>
               <div className="mt-3 space-y-2 text-sm">
                 {!leaderboard?.entries?.length ? (
@@ -239,14 +239,14 @@ export function DashboardPage() {
             </article>
           </section>
 
-          <section className="premium-card mt-5 rounded-2xl border p-5">
-            <h3 className="text-lg font-semibold">Quick Actions</h3>
-            <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
+          <section className="premium-card mt-5 rounded-2xl border p-4 sm:p-5">
+            <h3 className="text-base font-semibold sm:text-lg">Quick Actions</h3>
+            <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3 md:grid-cols-4">
               {quickActions.map((action) => (
                 <Link
                   key={action.title}
                   to={action.href}
-                  className="premium-inset group rounded-xl border p-4 transition hover:opacity-90"
+                  className="premium-inset group rounded-xl border p-3.5 transition hover:opacity-90 sm:p-4"
                   style={{ borderColor: 'var(--premium-card-border)' }}
                 >
                   <action.icon size={18} className="premium-accent" />

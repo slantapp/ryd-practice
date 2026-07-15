@@ -66,16 +66,16 @@ export function EditProfilePage() {
         <motion.section
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="premium-hero-gradient rounded-3xl border p-6"
+          className="premium-hero-gradient rounded-3xl border p-4 sm:p-6"
         >
           <p className="premium-accent text-[11px] uppercase tracking-[0.2em]">Account</p>
-          <h1 className="premium-heading mt-2 text-3xl font-bold">Edit profile</h1>
+          <h1 className="premium-heading mt-2 text-2xl font-bold sm:text-3xl">Edit profile</h1>
           <p className="premium-text-muted mt-2 text-sm">Update your name, contact, and study location.</p>
         </motion.section>
 
-        <article className="premium-card rounded-2xl border p-6">
+        <article className="premium-card rounded-2xl border p-4 sm:p-6">
           <form className="space-y-4" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <label className="premium-text-muted text-sm">
                 First name
                 <input className={inputClass} value={firstName} onChange={(e) => setFirstName(e.target.value)} />

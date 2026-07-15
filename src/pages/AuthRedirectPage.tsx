@@ -92,7 +92,7 @@ export function AuthRedirectPage() {
 
   return (
     <main className="grid min-h-screen place-items-center bg-[#12001f] px-4 text-white">
-      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur">
+      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-5 text-center backdrop-blur sm:p-8">
         {!error ? (
           <>
             <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-white/20 border-t-white" />

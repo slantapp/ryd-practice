@@ -61,11 +61,11 @@ export function PracticeResultPage() {
     <PremiumAppShell hideSidebar={isAssignedFlow} mainClassName={isAssignedFlow ? 'assigned-practice-main' : ''}>
       <div className="mx-auto max-w-4xl space-y-5">
         {loading ? (
-          <section className="premium-card rounded-2xl border p-10 text-center">
+          <section className="premium-card rounded-2xl border p-6 text-center sm:p-10">
             <p className="premium-text-muted">Loading your results...</p>
           </section>
         ) : error ? (
-          <section className="premium-card rounded-2xl border p-8">
+          <section className="premium-card rounded-2xl border p-5 sm:p-8">
             <p className="text-rose-400">{error}</p>
             <Link to="/practice/attempts" className="premium-accent mt-3 inline-block text-sm">
               Back to My Attempts
@@ -76,7 +76,7 @@ export function PracticeResultPage() {
             <motion.section
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              className="premium-hero-gradient relative overflow-hidden rounded-3xl border p-8 text-center"
+              className="premium-hero-gradient relative overflow-hidden rounded-3xl border p-5 text-center sm:p-6 md:p-8"
             >
               <p className="premium-accent text-[11px] uppercase tracking-[0.2em]">Practice Complete</p>
               <div
@@ -89,8 +89,8 @@ export function PracticeResultPage() {
               >
                 <Award size={36} className={passed ? 'text-emerald-400' : 'premium-accent'} />
               </div>
-              <h1 className="premium-heading mt-4 text-5xl font-bold">{score}%</h1>
-              <p className="premium-text-muted mt-2 text-lg">
+              <h1 className="premium-heading mt-4 text-3xl font-bold sm:text-4xl md:text-5xl">{score}%</h1>
+              <p className="premium-text-muted mt-2 text-base sm:text-lg">
                 {attempt?.practice?.name || 'Practice session'}
               </p>
               <p className="premium-text-soft mt-1 text-sm">
@@ -103,7 +103,7 @@ export function PracticeResultPage() {
               </p>
             </motion.section>
 
-            <section className="grid grid-cols-3 gap-4">
+            <section className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
               {[
                 { label: 'Total questions', value: summary?.total ?? 0, icon: BookOpen },
                 { label: 'Correct', value: summary?.correct ?? 0, icon: CheckCircle2 },
@@ -111,14 +111,14 @@ export function PracticeResultPage() {
               ].map((card) => (
                 <article key={card.label} className="premium-card rounded-2xl border p-5 text-center">
                   <card.icon size={20} className="premium-accent mx-auto" />
-                  <p className="premium-stat mt-3 text-3xl font-bold">{card.value}</p>
+                  <p className="premium-stat mt-3 text-2xl font-bold sm:text-3xl">{card.value}</p>
                   <p className="premium-text-soft mt-1 text-xs">{card.label}</p>
                 </article>
               ))}
             </section>
 
-            <section className="grid grid-cols-2 gap-4">
-              <article className="premium-card rounded-2xl border p-5">
+            <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <article className="premium-card rounded-2xl border p-4 sm:p-5">
                 <h3 className="flex items-center gap-2 text-lg font-semibold">
                   <Target size={18} className="premium-accent" />
                   Performance summary
@@ -141,7 +141,7 @@ export function PracticeResultPage() {
                 </ul>
               </article>
 
-              <article className="premium-card rounded-2xl border p-5">
+              <article className="premium-card rounded-2xl border p-4 sm:p-5">
                 <h3 className="text-lg font-semibold">Topics to review</h3>
                 {wrongTopics.length > 0 ? (
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -165,7 +165,7 @@ export function PracticeResultPage() {
               </article>
             </section>
 
-            <section className="premium-card rounded-2xl border p-5">
+            <section className="premium-card rounded-2xl border p-4 sm:p-5">
               <h3 className="text-lg font-semibold">{isAssignedFlow ? 'All done' : 'Next steps'}</h3>
               {isAssignedFlow ? (
                 <div className="mt-4 flex flex-wrap gap-3">

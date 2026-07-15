@@ -83,10 +83,10 @@ export function PracticeAttemptsPage() {
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="premium-hero-gradient relative overflow-hidden rounded-3xl border p-7"
+          className="premium-hero-gradient relative overflow-hidden rounded-3xl border p-4 sm:p-6 md:p-7"
         >
           <p className="premium-accent text-[11px] uppercase tracking-[0.2em]">Performance Center</p>
-          <h1 className="premium-heading mt-2 text-4xl font-bold">Your practice journey</h1>
+          <h1 className="premium-heading mt-2 text-2xl font-bold sm:text-3xl md:text-4xl">Your practice journey</h1>
           <p className="premium-text-muted mt-2 max-w-2xl">
             Review every session, resume in-progress work, and track score growth across subjects.
           </p>
@@ -118,26 +118,26 @@ export function PracticeAttemptsPage() {
           </div>
         </motion.section>
 
-        <section className="grid grid-cols-4 gap-3">
+        <section className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-4">
           {[
             { label: 'Total Attempts', value: stats.total, hint: 'All time', icon: Target },
             { label: 'Completed', value: stats.completed, hint: 'Finished sessions', icon: CheckCircle2 },
             { label: 'In Progress', value: stats.inProgress, hint: 'Active now', icon: Play },
             { label: 'Average Score', value: `${stats.avg}%`, hint: 'Across completed', icon: TrendingUp },
           ].map((card) => (
-            <div key={card.label} className="premium-card rounded-2xl border p-4 backdrop-blur-md">
-              <div className="flex items-center justify-between">
-                <p className="premium-text-soft text-xs">{card.label}</p>
-                <card.icon size={15} className="premium-accent" />
+            <div key={card.label} className="premium-card rounded-2xl border p-3 backdrop-blur-md sm:p-4">
+              <div className="flex items-start justify-between gap-2">
+                <p className="premium-text-soft min-w-0 text-[10px] leading-snug sm:text-xs">{card.label}</p>
+                <card.icon size={14} className="premium-accent mt-0.5 shrink-0" />
               </div>
-              <h3 className="premium-stat mt-2 text-2xl font-bold">{card.value}</h3>
-              <p className="premium-stat-hint mt-1 text-xs">{card.hint}</p>
+              <h3 className="premium-stat mt-1.5 text-xl font-bold sm:mt-2 sm:text-2xl">{card.value}</h3>
+              <p className="premium-stat-hint mt-1 truncate text-[10px] sm:text-xs">{card.hint}</p>
             </div>
           ))}
         </section>
 
-        <section className="grid grid-cols-[1.5fr_1fr] gap-4">
-          <article className="premium-card rounded-2xl border p-4 backdrop-blur-md">
+        <section className="grid grid-cols-1 gap-4 md:grid-cols-[1.5fr_1fr]">
+          <article className="premium-card rounded-2xl border p-4 sm:p-5">
             <div className="mb-2 flex items-center gap-2">
               <Filter size={14} className="premium-accent" />
               <h3 className="text-base font-semibold">Filter Sessions</h3>
@@ -167,8 +167,8 @@ export function PracticeAttemptsPage() {
             </div>
           </article>
 
-          <article className="premium-card rounded-2xl border p-5">
-            <h3 className="text-lg font-semibold">Your Stats</h3>
+          <article className="premium-card rounded-2xl border p-4 sm:p-5">
+            <h3 className="text-base font-semibold sm:text-lg">Your Stats</h3>
             <div className="premium-text-muted mt-3 space-y-3 text-sm">
               <p>
                 <Sparkles size={14} className="premium-accent inline" /> Completed: <strong>{stats.completed}</strong> sessions
@@ -187,9 +187,9 @@ export function PracticeAttemptsPage() {
           </article>
         </section>
 
-        <section className="premium-card rounded-2xl border p-5">
+        <section className="premium-card rounded-2xl border p-4 sm:p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-semibold">All Attempts</h3>
+            <h3 className="text-base font-semibold sm:text-lg">All Attempts</h3>
             <span className="premium-text-soft text-xs">{filtered.length} shown</span>
           </div>
           <div className="space-y-3">

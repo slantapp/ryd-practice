@@ -54,7 +54,7 @@ export function StudySessionModal({ open, editing, form, onChange, onClose, onSu
               required
             />
           </label>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <label className="premium-text-muted text-sm">
               Subject
               <select
@@ -84,7 +84,7 @@ export function StudySessionModal({ open, editing, form, onChange, onClose, onSu
               </select>
             </label>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <label className="premium-text-muted text-sm">
               Start time
               <input
@@ -115,7 +115,7 @@ export function StudySessionModal({ open, editing, form, onChange, onClose, onSu
               onChange={(e) => onChange({ ...form, notes: e.target.value })}
             />
           </label>
-          <div className="flex gap-2 pt-2">
+          <div className="flex flex-wrap gap-2 pt-2">
             <button type="submit" className="premium-btn-primary premium-btn-sm rounded-lg px-4 py-2 text-xs font-semibold">
               {editing ? 'Save changes' : 'Add session'}
             </button>

@@ -56,45 +56,82 @@ export function ProfileCompletionForm({ onSuccess, compact = false }: ProfileCom
     }
   }
 
+  if (!compact) {
+    return (
+      <form className="profile-form" onSubmit={handleSubmit}>
+        <div className="profile-grid-two">
+          <label>
+            First Name
+            <input value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+          </label>
+          <label>
+            Last Name
+            <input value={lastName} onChange={(e) => setLastName(e.target.value)} />
+          </label>
+        </div>
+
+        <label>
+          Phone Number
+          <input value={phone} onChange={(e) => setPhone(e.target.value)} />
+        </label>
+
+        <ProfileLocationFields values={location} onChange={setLocation} />
+
+        {error ? <p className="text-sm text-rose-500">{error}</p> : null}
+        <button className="profile-submit" type="submit" disabled={!canSubmit || profileUpdating}>
+          {profileUpdating ? 'Saving...' : 'Save & Continue →'}
+        </button>
+      </form>
+    )
+  }
+
   return (
-    <form className={compact ? 'space-y-4' : 'profile-form'} onSubmit={handleSubmit}>
-      <div className={compact ? 'grid grid-cols-1 gap-4 sm:grid-cols-2' : 'profile-grid-two'}>
-        <label className={compact ? 'block text-sm' : undefined}>
-          <span className={compact ? 'premium-text-soft mb-1 block text-xs font-medium' : undefined}>First Name</span>
+    <form className="profile-completion-form" onSubmit={handleSubmit}>
+      <div className="profile-completion-row">
+        <label className="profile-completion-field">
+          <span>First name</span>
           <input
-            className={compact ? 'premium-input w-full rounded-xl border px-3 py-2' : undefined}
+            className="profile-completion-input"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
+            autoComplete="given-name"
+            placeholder="Ada"
           />
         </label>
-        <label className={compact ? 'block text-sm' : undefined}>
-          <span className={compact ? 'premium-text-soft mb-1 block text-xs font-medium' : undefined}>Last Name</span>
+        <label className="profile-completion-field">
+          <span>Last name</span>
           <input
-            className={compact ? 'premium-input w-full rounded-xl border px-3 py-2' : undefined}
+            className="profile-completion-input"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
+            autoComplete="family-name"
+            placeholder="Lovelace"
           />
         </label>
       </div>
 
-      <label className={compact ? 'block text-sm' : undefined}>
-        <span className={compact ? 'premium-text-soft mb-1 block text-xs font-medium' : undefined}>Phone Number</span>
+      <label className="profile-completion-field">
+        <span>Phone number</span>
         <input
-          className={compact ? 'premium-input w-full rounded-xl border px-3 py-2' : undefined}
+          className="profile-completion-input"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+          autoComplete="tel"
+          inputMode="tel"
+          placeholder="+234…"
         />
       </label>
 
       <ProfileLocationFields values={location} onChange={setLocation} />
 
-      {error ? <p className="text-sm text-rose-500">{error}</p> : null}
+      {error ? <p className="profile-completion-error">{error}</p> : null}
+
       <button
-        className={compact ? 'premium-btn-primary w-full rounded-xl px-4 py-2.5 text-sm font-semibold disabled:opacity-50' : 'profile-submit'}
+        className="profile-completion-submit"
         type="submit"
         disabled={!canSubmit || profileUpdating}
       >
-        {profileUpdating ? 'Saving...' : 'Save & Continue →'}
+        {profileUpdating ? 'Saving…' : 'Save & continue'}
       </button>
     </form>
   )

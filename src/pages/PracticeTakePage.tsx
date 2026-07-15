@@ -247,7 +247,7 @@ export function PracticeTakePage() {
 
   if (loading) {
     return shell(
-      <section className="premium-card w-full max-w-2xl rounded-2xl border p-8 text-center">
+      <section className="premium-card w-full max-w-2xl rounded-2xl border p-5 text-center sm:p-8">
         <p className="premium-text-muted">Preparing your practice session...</p>
       </section>,
     )
@@ -255,7 +255,7 @@ export function PracticeTakePage() {
 
   if (error && !currentQuestion) {
     return shell(
-      <section className="premium-card w-full max-w-2xl rounded-2xl border p-8">
+      <section className="premium-card w-full max-w-2xl rounded-2xl border p-5 sm:p-8">
         <p className="text-rose-400">{error}</p>
         {isAssignedFlow && assignedPracticeId ? (
           <button
@@ -276,7 +276,7 @@ export function PracticeTakePage() {
 
   if (!currentQuestion) {
     return shell(
-      <section className="premium-card w-full max-w-2xl rounded-2xl border p-8">
+      <section className="premium-card w-full max-w-2xl rounded-2xl border p-5 sm:p-8">
         <p className="premium-text-muted">No questions found.</p>
       </section>,
     )
@@ -284,14 +284,14 @@ export function PracticeTakePage() {
 
   if (paused && isAssignedFlow) {
     return shell(
-      <section className="premium-card w-full max-w-lg rounded-2xl border p-8 text-center">
+      <section className="premium-card w-full max-w-lg rounded-2xl border p-5 text-center sm:p-8">
         <div
           className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full"
           style={{ background: 'color-mix(in srgb, var(--premium-accent-strong) 18%, transparent)' }}
         >
           <Pause size={28} className="premium-accent" />
         </div>
-        <h1 className="premium-heading text-2xl font-bold">Practice paused</h1>
+        <h1 className="premium-heading text-xl font-bold sm:text-2xl">Practice paused</h1>
         <p className="premium-text-muted mt-3 text-sm leading-relaxed">
           Your answers have been saved. You can resume this test anytime from your assigned practice page.
         </p>

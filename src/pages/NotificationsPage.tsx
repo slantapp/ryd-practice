@@ -72,7 +72,7 @@ export function NotificationsPage() {
   return (
     <PremiumAppShell>
       <div className="mx-auto max-w-3xl space-y-5">
-        <section className="premium-card rounded-2xl border p-6">
+        <section className="premium-card rounded-2xl border p-4 sm:p-6">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="premium-accent text-[11px] uppercase tracking-[0.2em]">Inbox</p>

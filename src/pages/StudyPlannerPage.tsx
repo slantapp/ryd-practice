@@ -209,10 +209,10 @@ export function StudyPlannerPage() {
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="premium-hero-gradient rounded-3xl border p-7 shadow-2xl"
+          className="premium-hero-gradient rounded-3xl border p-4 shadow-2xl sm:p-6 md:p-7"
         >
           <p className="premium-accent text-[11px] uppercase tracking-[0.2em]">Study Planner</p>
-          <h1 className="premium-heading mt-2 text-4xl font-bold">Plan your week</h1>
+          <h1 className="premium-heading mt-2 text-2xl font-bold sm:text-3xl md:text-4xl">Plan your week</h1>
           <p className="premium-text-muted mt-2 max-w-2xl">
             Schedule subjects, track completion, and hit your weekly study target. Your plan syncs to your account.
           </p>
@@ -227,36 +227,36 @@ export function StudyPlannerPage() {
           </button>
         </motion.section>
 
-        <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <section className="grid grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-4">
           {[
             { label: 'Weekly Goal', value: `${planner.weeklyGoalHours}h`, icon: Target },
             { label: 'Scheduled', value: `${Math.round(scheduledMins / 60)}h ${scheduledMins % 60}m`, icon: CalendarDays },
             { label: 'Completed', value: `${Math.round(doneMins / 60)}h ${doneMins % 60}m`, icon: CheckCircle2 },
             { label: 'Progress', value: `${progressPct}%`, icon: Clock3 },
           ].map((card) => (
-            <div key={card.label} className="premium-card rounded-2xl border p-4">
-              <div className="flex items-center justify-between">
-                <p className="premium-text-soft text-xs">{card.label}</p>
-                <card.icon size={15} className="premium-accent" />
+            <div key={card.label} className="premium-card rounded-2xl border p-3 sm:p-4">
+              <div className="flex items-start justify-between gap-2">
+                <p className="premium-text-soft min-w-0 text-[10px] leading-snug sm:text-xs">{card.label}</p>
+                <card.icon size={14} className="premium-accent mt-0.5 shrink-0" />
               </div>
-              <h3 className="premium-stat mt-2 text-2xl font-bold">{card.value}</h3>
+              <h3 className="premium-stat mt-1.5 text-lg font-bold sm:mt-2 sm:text-2xl">{card.value}</h3>
             </div>
           ))}
         </section>
 
-        <section className="premium-card rounded-2xl border p-5">
+        <section className="premium-card rounded-2xl border p-4 sm:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="premium-heading text-lg font-semibold">Weekly goal</h3>
-            <div className="flex items-center gap-2">
+            <h3 className="premium-heading text-base font-semibold sm:text-lg">Weekly goal</h3>
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
               <input
                 type="range"
                 min={4}
                 max={24}
                 value={planner.weeklyGoalHours}
                 onChange={(e) => updateWeeklyGoal(Number(e.target.value))}
-                className="w-40 accent-[#b0438f]"
+                className="w-full accent-[#b0438f] sm:w-40"
               />
-              <span className="premium-accent text-sm">{planner.weeklyGoalHours} hours / week</span>
+              <span className="premium-accent shrink-0 text-sm">{planner.weeklyGoalHours} hours / week</span>
             </div>
           </div>
           <div className="mt-3 h-2 rounded-full bg-black/10 dark:bg-white/10">
@@ -271,10 +271,10 @@ export function StudyPlannerPage() {
         </section>
 
         {/* Weekly schedule — redesigned */}
-        <section className="premium-card rounded-2xl border p-5">
+        <section className="premium-card rounded-2xl border p-4 sm:p-5">
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h3 className="premium-heading text-lg font-semibold">Weekly schedule</h3>
+              <h3 className="premium-heading text-base font-semibold sm:text-lg">Weekly schedule</h3>
               <p className="premium-text-soft mt-1 text-sm">
                 Tap a session to edit · use + on any day to add
               </p>
@@ -285,7 +285,79 @@ export function StudyPlannerPage() {
             </div>
           </div>
 
-          <div className="-mx-1 overflow-x-auto pb-1">
+          {/* Mobile: stacked day cards (no sideways scroll) */}
+          <div className="space-y-3 md:hidden">
+            {DAY_LABELS.map((label, dayIndex) => {
+              const daySessions = sessionsByDay[dayIndex]
+              const isToday = dayIndex === todayIndex
+              const dayMins = daySessions.reduce((sum, s) => sum + s.durationMins, 0)
+
+              return (
+                <div
+                  key={`mobile-${label}`}
+                  className={`rounded-2xl border p-3 transition-colors planner-week-card ${
+                    isToday ? 'border-[#d05ac0]/50 bg-[#b0438f]/10 shadow-[0_0_24px_rgba(176,67,143,0.12)]' : ''
+                  }`}
+                >
+                  <div className="mb-3 flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p
+                        className={`text-[10px] font-bold uppercase tracking-wider ${
+                          isToday ? 'premium-accent' : 'premium-text-soft'
+                        }`}
+                      >
+                        {label}
+                        {isToday ? ' · Today' : ''}
+                      </p>
+                      <p className={`text-sm font-semibold ${isToday ? 'premium-heading' : 'premium-text-muted'}`}>
+                        {DAY_LABELS_FULL[dayIndex]}
+                        {daySessions.length > 0 ? (
+                          <span className="premium-text-soft font-normal">
+                            {' '}
+                            · {daySessions.length} session{daySessions.length === 1 ? '' : 's'} · {dayMins}m
+                          </span>
+                        ) : null}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => openAddForm(dayIndex)}
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border premium-inset premium-text-soft transition hover:border-[#d05ac0]/40 hover:text-[#d05ac0]"
+                      style={{ borderColor: 'var(--premium-card-border)' }}
+                      aria-label={`Add session on ${DAY_LABELS_FULL[dayIndex]}`}
+                    >
+                      <Plus size={14} className="shrink-0" />
+                    </button>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    {daySessions.length === 0 ? (
+                      <button
+                        type="button"
+                        onClick={() => openAddForm(dayIndex)}
+                        className="planner-empty-slot flex items-center justify-center gap-2 rounded-xl border border-dashed px-3 py-3 text-center transition"
+                      >
+                        <Plus size={14} className="premium-text-soft" />
+                        <span className="premium-text-soft text-xs">Free day — tap to schedule</span>
+                      </button>
+                    ) : (
+                      daySessions.map((session) => (
+                        <WeekDaySessionCard
+                          key={session.id}
+                          session={session}
+                          onEdit={() => openEditForm(session)}
+                          onToggle={() => toggleComplete(session.id)}
+                        />
+                      ))
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Tablet/desktop: 7-day week board */}
+          <div className="-mx-1 hidden overflow-x-auto pb-1 md:block">
             <div className="grid min-w-[840px] grid-cols-7 gap-2">
               {DAY_LABELS.map((label, dayIndex) => {
                 const daySessions = sessionsByDay[dayIndex]
@@ -356,7 +428,7 @@ export function StudyPlannerPage() {
           </div>
         </section>
 
-        <section className="premium-card rounded-2xl border p-5">
+        <section className="premium-card rounded-2xl border p-4 sm:p-5">
           <div className="flex items-center justify-between gap-2">
             <h3 className="premium-heading text-lg font-semibold">Today — {DAY_LABELS_FULL[todayIndex]}</h3>
             <span className="premium-accent rounded-full bg-[#b0438f]/20 px-2.5 py-0.5 text-xs font-medium">
@@ -404,7 +476,7 @@ export function StudyPlannerPage() {
         />
 
         {/* All sessions — grouped by day */}
-        <section className="premium-card rounded-2xl border p-5">
+        <section className="premium-card rounded-2xl border p-4 sm:p-5">
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <div>
               <h3 className="premium-heading text-lg font-semibold">All sessions</h3>
@@ -433,7 +505,7 @@ export function StudyPlannerPage() {
           </div>
 
           {filteredSessions.length === 0 ? (
-            <div className="premium-inset rounded-xl border border-dashed border-white/10 p-8 text-center">
+            <div className="premium-inset rounded-xl border border-dashed border-white/10 p-5 text-center sm:p-8">
               <CalendarDays size={28} className="premium-text-soft mx-auto mb-2" />
               <p className="premium-text-muted text-sm">
                 {sessionFilter === 'all'

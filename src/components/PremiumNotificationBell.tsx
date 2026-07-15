@@ -136,7 +136,7 @@ export function PremiumNotificationBell() {
         ? createPortal(
             <div
               ref={panelRef}
-              className="premium-notification-panel fixed z-[9999] flex w-80 max-h-[22rem] flex-col overflow-hidden rounded-xl border shadow-xl"
+              className="premium-notification-panel fixed z-[9999] flex w-[min(20rem,calc(100vw-1.5rem))] max-h-[min(22rem,70vh)] flex-col overflow-hidden rounded-xl border shadow-xl"
               style={{ top: panelStyle.top, right: panelStyle.right }}
             >
           <div

@@ -38,10 +38,10 @@ export function PracticeHomePage() {
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="premium-hero-gradient relative overflow-hidden rounded-3xl border p-7"
+          className="premium-hero-gradient relative overflow-hidden rounded-3xl border p-4 sm:p-6 md:p-7"
         >
           <p className="premium-accent text-[11px] uppercase tracking-[0.2em]">Global Rankings</p>
-          <h1 className="premium-heading mt-2 text-4xl font-bold">Practice Leaderboard</h1>
+          <h1 className="premium-heading mt-2 text-2xl font-bold sm:text-3xl md:text-4xl">Practice Leaderboard</h1>
           <p className="premium-text-muted mt-2 max-w-2xl">
             Rankings are based on average scores across completed practice sessions on RYD Practice.
           </p>
@@ -55,9 +55,9 @@ export function PracticeHomePage() {
           </div>
         </motion.section>
 
-        <section className="premium-card rounded-2xl border p-5">
+        <section className="premium-card rounded-2xl border p-4 sm:p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="flex items-center gap-2 text-lg font-semibold">
+            <h3 className="flex items-center gap-2 text-base font-semibold sm:text-lg">
               <Trophy size={18} className="premium-accent" />
               Top performers
             </h3>
@@ -126,9 +126,9 @@ export function PracticeHomePage() {
           ) : null}
         </section>
 
-        <section className="grid grid-cols-2 gap-4">
-          <article className="premium-card rounded-2xl border p-5">
-            <h3 className="flex items-center gap-2 text-lg font-semibold">
+        <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <article className="premium-card rounded-2xl border p-4 sm:p-5">
+            <h3 className="flex items-center gap-2 text-base font-semibold sm:text-lg">
               <Target size={16} className="premium-accent" /> How to climb
             </h3>
             <ul className="premium-text-muted mt-3 list-inside list-disc space-y-2 text-sm">
@@ -137,8 +137,8 @@ export function PracticeHomePage() {
               <li>Review mistakes within 24 hours</li>
             </ul>
           </article>
-          <article className="premium-card rounded-2xl border p-5">
-            <h3 className="text-lg font-semibold">Your progress</h3>
+          <article className="premium-card rounded-2xl border p-4 sm:p-5">
+            <h3 className="text-base font-semibold sm:text-lg">Your progress</h3>
             <p className="premium-text-muted mt-2 text-sm">
               Track scores and paused sessions on the My Attempts page after you finish practice sets.
             </p>

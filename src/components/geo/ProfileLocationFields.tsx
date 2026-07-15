@@ -52,7 +52,7 @@ export function ProfileLocationFields({ values, onChange }: ProfileLocationField
   }
 
   return (
-    <div className="space-y-4">
+    <div className="profile-location-fields">
       <GeoSelect
         label="Country"
         placeholder="Select country"
@@ -61,10 +61,10 @@ export function ProfileLocationFields({ values, onChange }: ProfileLocationField
         getOptionLabel={(c) => c.name}
         onChange={handleCountryChange}
       />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="profile-location-split">
         <GeoSelect
           label="Province / State"
-          placeholder={selectedCountry ? '-- select state --' : 'Select country first'}
+          placeholder={selectedCountry ? 'Select state' : 'Select country first'}
           value={values.state}
           options={states}
           disabled={!selectedCountry}
@@ -73,7 +73,7 @@ export function ProfileLocationFields({ values, onChange }: ProfileLocationField
         />
         <GeoSelect
           label="Study timezone"
-          placeholder={selectedCountry ? '-- select timezone --' : 'Select country first'}
+          placeholder={selectedCountry ? 'Select timezone' : 'Select country first'}
           value={values.timezone}
           options={timezones}
           disabled={!selectedCountry}
