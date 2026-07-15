@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { PremiumTopNav } from './PremiumTopNav'
 import { ProfileCompletionOverlay } from './ProfileCompletionOverlay'
+import { PwaInstallBanner } from './PwaInstallBanner'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 
@@ -213,6 +214,7 @@ export function PremiumAppShell({ children, hideSidebar = false, mainClassName =
         </div>
       </div>
       <ProfileCompletionOverlay />
+      <PwaInstallBanner />
     </div>
   )
 }
