@@ -14,31 +14,28 @@ export function clearAssignedPracticeId() {
   sessionStorage.removeItem(ASSIGNED_PRACTICE_ID_KEY)
 }
 
-/** Resolve assigned practice id from session storage or current route. */
+/**
+ * Resolve assigned practice id only from session storage or the dedicated
+ * `/practice/assigned/:id` route — never from a normal `/practice/:id/take` URL.
+ */
 export function resolveAssignedPracticeId(pathname?: string): string | null {
   const stored = getAssignedPracticeId()
   if (stored) return stored
   if (!pathname) return null
-  const fromAssigned = pathname.match(/^\/practice\/assigned\/([^/]+)/)?.[1]
-  if (fromAssigned) return fromAssigned
-  const fromTake = pathname.match(/^\/practice\/([^/]+)\/take/)?.[1]
-  return fromTake || null
+  return pathname.match(/^\/practice\/assigned\/([^/]+)/)?.[1] ?? null
 }
 
 export function ensureAssignedPracticeId(practiceId: string | null | undefined) {
   if (practiceId?.trim()) setAssignedPracticeId(practiceId.trim())
 }
 
+/** True only when this session was entered as a parent-app assigned test. */
 export function isAssignedPracticeUser(): boolean {
   return Boolean(getAssignedPracticeId())
 }
 
 export function isAssignedPracticePath(pathname: string): boolean {
-  return (
-    pathname.startsWith('/practice/assigned/') ||
-    /^\/practice\/[^/]+\/take/.test(pathname) ||
-    pathname.startsWith('/practice/result/')
-  )
+  return pathname.startsWith('/practice/assigned/')
 }
 
 export function isAllowedAssignedRoute(pathname: string): boolean {
@@ -61,5 +58,5 @@ export function goToParentDashboard(): void {
 
 export function isAssignedPracticeFlow(pathname?: string): boolean {
   if (getAssignedPracticeId()) return true
-  return pathname ? isAssignedPracticePath(pathname) && pathname.startsWith('/practice/result/') : false
+  return pathname ? isAssignedPracticePath(pathname) : false
 }

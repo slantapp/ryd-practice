@@ -3,7 +3,14 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, Flag, Eye, Pause } from 'lucide-react'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { PremiumAppShell } from '../components/PremiumAppShell'
-import { getAssignedPracticeId, goToParentDashboard, isAssignedPracticeUser } from '../lib/assignedPracticeFlow'
+import { useAuth } from '../context/AuthContext'
+import {
+  clearAssignedPracticeId,
+  getAssignedPracticeId,
+  goToParentDashboard,
+  isAssignedPracticeUser,
+} from '../lib/assignedPracticeFlow'
+import { PRACTICE_SIGNUP_SOURCE } from '../lib/api'
 import { practiceApi } from '../lib/practiceApi'
 import type { PracticeQuestion } from '../types'
 
@@ -39,6 +46,7 @@ export function PracticeTakePage() {
   const { practiceId = '' } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
+  const { user } = useAuth()
   const skipIntro = Boolean((location.state as { skipIntro?: boolean } | null)?.skipIntro)
 
   const [questions, setQuestions] = useState<PracticeQuestion[]>([])
@@ -56,8 +64,20 @@ export function PracticeTakePage() {
   const [pauseConfirmOpen, setPauseConfirmOpen] = useState(false)
   const [paused, setPaused] = useState(false)
 
-  const isAssignedFlow = isAssignedPracticeUser()
-  const assignedPracticeId = getAssignedPracticeId()
+  const isAssignedFlow = useMemo(() => {
+    const source = localStorage.getItem('practice-signup-source')
+    const isIntegrationPackage = Boolean(user?.email?.toLowerCase().endsWith('@ryd-cbt.integration'))
+    // Practice-app students are never on the parent assigned-test flow.
+    if (source === PRACTICE_SIGNUP_SOURCE && !isIntegrationPackage) return false
+    return isAssignedPracticeUser()
+  }, [user?.email])
+
+  const assignedPracticeId = isAssignedFlow ? getAssignedPracticeId() : null
+
+  useEffect(() => {
+    if (isAssignedFlow) return
+    if (getAssignedPracticeId()) clearAssignedPracticeId()
+  }, [isAssignedFlow])
 
   useEffect(() => {
     const load = async () => {
@@ -178,21 +198,15 @@ export function PracticeTakePage() {
         navigate(`/practice/assigned/${assignedPracticeId}`)
         return
       }
-      navigate('/practice/attempts')
+      navigate('/dashboard')
       return
     }
     setSaving(true)
     setError('')
     try {
       await persistCurrentAnswer()
-      if (isAssignedFlow) {
-        setPauseConfirmOpen(false)
-        setPaused(true)
-        return
-      }
-      navigate('/practice/attempts', {
-        state: { message: 'Practice paused. You can continue anytime from My Attempts.' },
-      })
+      setPauseConfirmOpen(false)
+      setPaused(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save progress')
     } finally {
@@ -291,9 +305,9 @@ export function PracticeTakePage() {
         >
           <Pause size={28} className="premium-accent" />
         </div>
-        <h1 className="premium-heading text-xl font-bold sm:text-2xl">Practice paused</h1>
+        <h1 className="premium-heading text-xl font-bold sm:text-2xl">Test paused</h1>
         <p className="premium-text-muted mt-3 text-sm leading-relaxed">
-          Your answers have been saved. You can resume this test anytime from your assigned practice page.
+          Your answers have been saved. You can resume this assigned test anytime from your assigned practice page.
         </p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
           {assignedPracticeId ? (
@@ -317,30 +331,58 @@ export function PracticeTakePage() {
     )
   }
 
+  if (paused && !isAssignedFlow) {
+    return shell(
+      <section className="premium-card w-full max-w-lg rounded-2xl border p-5 text-center sm:p-8">
+        <div
+          className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full"
+          style={{ background: 'color-mix(in srgb, var(--premium-accent-strong) 18%, transparent)' }}
+        >
+          <Pause size={28} className="premium-accent" />
+        </div>
+        <h1 className="premium-heading text-xl font-bold sm:text-2xl">Practice paused</h1>
+        <p className="premium-text-muted mt-3 text-sm leading-relaxed">
+          Your progress is saved. You can continue this practice anytime from My Attempts.
+        </p>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <button
+            type="button"
+            onClick={() =>
+              navigate('/practice/attempts', {
+                state: { message: 'Practice paused. You can continue anytime from My Attempts.' },
+              })
+            }
+            className="premium-btn-secondary rounded-xl border px-5 py-2.5 text-sm font-semibold"
+          >
+            My Attempts
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/dashboard')}
+            className="premium-btn-primary rounded-xl px-5 py-2.5 text-sm font-semibold"
+          >
+            Back to dashboard
+          </button>
+        </div>
+      </section>,
+    )
+  }
+
   const options = optionsFromQuestion(currentQuestion.options)
 
   return shell(
     <>
       <div className="practice-take-sticky-bar sticky top-0 z-20 -mx-1 mb-4 w-full max-w-3xl px-1 pb-3 pt-1">
         <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
-          {isAssignedFlow && assignedPracticeId ? (
-            <button
-              type="button"
-              onClick={() => navigate(`/practice/assigned/${assignedPracticeId}`)}
-              className="premium-btn-secondary inline-flex shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold"
-            >
-              <ArrowLeft size={16} />
-              Exit
-            </button>
-          ) : (
-            <Link
-              to="/practice/catalog"
-              className="premium-btn-secondary inline-flex shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold"
-            >
-              <ArrowLeft size={16} />
-              Exit
-            </Link>
-          )}
+          <button
+            type="button"
+            disabled={saving}
+            onClick={() => setPauseConfirmOpen(true)}
+            className="premium-btn-secondary inline-flex shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold"
+          >
+            <ArrowLeft size={16} />
+            Exit
+          </button>
           <div className="min-w-0 flex-1 px-1 sm:px-4">
             <div className="premium-text-soft mb-1 flex justify-between text-xs">
               <span>
@@ -361,13 +403,7 @@ export function PracticeTakePage() {
           <button
             type="button"
             disabled={saving}
-            onClick={() => {
-              if (isAssignedFlow) {
-                setPauseConfirmOpen(true)
-                return
-              }
-              void handlePauseAndExit()
-            }}
+            onClick={() => setPauseConfirmOpen(true)}
             className="premium-btn-secondary inline-flex shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold sm:px-4"
           >
             <Pause size={16} />
@@ -536,8 +572,12 @@ export function PracticeTakePage() {
 
       <ConfirmDialog
         open={pauseConfirmOpen}
-        title="Pause practice?"
-        description="Your progress will be saved. You can resume this test later from your assigned practice page."
+        title={isAssignedFlow ? 'Pause test?' : 'Pause practice?'}
+        description={
+          isAssignedFlow
+            ? 'Your progress will be saved. You can resume this test later from your assigned practice page.'
+            : 'Your progress will be saved. You can continue anytime from My Attempts or your dashboard.'
+        }
         confirmLabel="Yes, pause"
         cancelLabel="Keep practicing"
         loading={saving}

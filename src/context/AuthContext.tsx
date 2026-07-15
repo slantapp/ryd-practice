@@ -112,7 +112,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const me = await authApi.getMe()
     setUser(me.student)
     localStorage.setItem(USER_KEY, JSON.stringify(me.student))
-    ensureAssignedPracticeId(me.packageAccess?.assignedPracticeId)
+    if (me.packageAccess?.assignedPracticeId) {
+      ensureAssignedPracticeId(me.packageAccess.assignedPracticeId)
+    } else if (localStorage.getItem(SOURCE_KEY) === PRACTICE_SIGNUP_SOURCE) {
+      // Practice-app logins must never inherit a stale assigned-test session.
+      clearAssignedPracticeId()
+    }
     const apiExtras =
       me.profileExtras?.country && me.profileExtras?.timezone
         ? {

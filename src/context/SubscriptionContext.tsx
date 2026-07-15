@@ -73,11 +73,10 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [billingError, setBillingError] = useState<string | null>(null)
 
   const assignedPracticeId = resolveAssignedPracticeId(location.pathname)
-  if (assignedPracticeId) {
+  if (assignedPracticeId && location.pathname.startsWith('/practice/assigned/')) {
     ensureAssignedPracticeId(assignedPracticeId)
   }
-  const assignedFlow =
-    Boolean(assignedPracticeId || getAssignedPracticeId()) || isAssignedPracticePath(location.pathname)
+  const assignedFlow = Boolean(getAssignedPracticeId()) || isAssignedPracticePath(location.pathname)
   const adminExplore = isAdminExplorePracticeUser(user?.email)
   const packageStudent = Boolean(user?.email?.toLowerCase().endsWith('@ryd-cbt.integration'))
   const exempt = assignedFlow || adminExplore || packageStudent
