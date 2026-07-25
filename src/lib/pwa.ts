@@ -19,12 +19,21 @@ export function isMobileDevice(): boolean {
   return /Android|iPhone|iPad|iPod/i.test(window.navigator.userAgent)
 }
 
-export function isIosSafari(): boolean {
+export function isIosDevice(): boolean {
   if (typeof window === 'undefined') return false
   const ua = window.navigator.userAgent
-  const isIos = /iPhone|iPad|iPod/i.test(ua)
-  const isSafari = /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua)
-  return isIos && isSafari
+  const iPhoneLike = /iPhone|iPad|iPod/i.test(ua)
+  // iPadOS 13+ can report as Mac; treat touch Macs as iOS for install instructions.
+  const iPadOsDesktopUa =
+    navigator.platform === 'MacIntel' && typeof navigator.maxTouchPoints === 'number' && navigator.maxTouchPoints > 1
+  return iPhoneLike || iPadOsDesktopUa
+}
+
+export function isIosSafari(): boolean {
+  if (typeof window === 'undefined') return false
+  if (!isIosDevice()) return false
+  const ua = window.navigator.userAgent
+  return /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|Chrome|Firefox|Edg/i.test(ua)
 }
 
 export function isPwaDismissed(): boolean {

@@ -6,6 +6,7 @@ export function PwaInstallBanner() {
     visible,
     canInstall,
     showIosInstructions,
+    preferSafari,
     installing,
     install,
     dismiss,
@@ -38,12 +39,20 @@ export function PwaInstallBanner() {
           </p>
           <p id="pwa-install-desc" className="premium-text-muted mt-1 text-xs leading-relaxed">
             {showIosInstructions
-              ? 'Open in one tap — no app store needed.'
-              : 'Install for quick access from your phone home screen.'}
+              ? preferSafari
+                ? 'For the best install experience, open this page in Safari first.'
+                : 'Open in one tap — no app store needed.'
+              : 'Install for quick access from your home screen.'}
           </p>
 
           {showIosInstructions ? (
             <ol className="premium-text-muted mt-3 space-y-1.5 text-xs">
+              {preferSafari ? (
+                <li className="flex items-center gap-2">
+                  <Smartphone size={14} className="premium-accent shrink-0" />
+                  Open this site in Safari
+                </li>
+              ) : null}
               <li className="flex items-center gap-2">
                 <Share size={14} className="premium-accent shrink-0" />
                 Tap Share in Safari

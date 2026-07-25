@@ -22,6 +22,7 @@ import { SignupPage } from './pages/SignupPage'
 import { AuthRedirectPage } from './pages/AuthRedirectPage'
 import { getAssignedPracticeId, isAllowedAssignedRoute } from './lib/assignedPracticeFlow'
 import { PracticeSubscriptionGate } from './components/PracticeSubscriptionModal'
+import { PwaInstallBanner } from './components/PwaInstallBanner'
 
 function ProtectedRoute({ children }: { children: ReactElement }) {
   const { user, requiresProfileCompletion, bootstrapping } = useAuth()
@@ -74,162 +75,165 @@ function GuestRoute({ children }: { children: ReactElement }) {
 
 function App() {
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={<Navigate to="/signup" replace />}
-      />
-      <Route
-        path="/signup"
-        element={(
-          <GuestRoute>
-            <SignupPage />
-          </GuestRoute>
-        )}
-      />
-      <Route
-        path="/otp"
-        element={(
-          <GuestRoute>
-            <OtpVerificationPage />
-          </GuestRoute>
-        )}
-      />
-      <Route
-        path="/login"
-        element={(
-          <GuestRoute>
-            <LoginPage />
-          </GuestRoute>
-        )}
-      />
-      <Route path="/auth/redirect" element={<AuthRedirectPage />} />
-      <Route
-        path="/forgot-password"
-        element={(
-          <GuestRoute>
-            <ForgotPasswordPage />
-          </GuestRoute>
-        )}
-      />
-      <Route
-        path="/reset-password"
-        element={(
-          <GuestRoute>
-            <ResetPasswordPage />
-          </GuestRoute>
-        )}
-      />
-      <Route
-        path="/reset-password/success"
-        element={(
-          <GuestRoute>
-            <ResetSuccessPage />
-          </GuestRoute>
-        )}
-      />
-      <Route
-        path="/dashboard"
-        element={(
-          <ProtectedRoute>
-            <DashboardPage />
-          </ProtectedRoute>
-        )}
-      />
-      <Route
-        path="/profile-setup"
-        element={(
-          <ProtectedRoute>
-            <ProfileSetupPage />
-          </ProtectedRoute>
-        )}
-      />
-      <Route path="/settings" element={<Navigate to="/settings/profile" replace />} />
-      <Route
-        path="/settings/profile"
-        element={(
-          <ProtectedRoute>
-            <EditProfilePage />
-          </ProtectedRoute>
-        )}
-      />
-      <Route
-        path="/settings/password"
-        element={(
-          <ProtectedRoute>
-            <ChangePasswordPage />
-          </ProtectedRoute>
-        )}
-      />
-      <Route
-        path="/study-planner"
-        element={(
-          <ProtectedRoute>
-            <StudyPlannerPage />
-          </ProtectedRoute>
-        )}
-      />
-      <Route
-        path="/notifications"
-        element={(
-          <ProtectedRoute>
-            <NotificationsPage />
-          </ProtectedRoute>
-        )}
-      />
-      <Route
-        path="/practice/home"
-        element={(
-          <ProtectedRoute>
-            <PracticeHomePage />
-          </ProtectedRoute>
-        )}
-      />
-      <Route
-        path="/practice/catalog"
-        element={(
-          <ProtectedRoute>
-            <PracticeCatalogPage />
-          </ProtectedRoute>
-        )}
-      />
-      <Route
-        path="/practice/attempts"
-        element={(
-          <ProtectedRoute>
-            <PracticeAttemptsPage />
-          </ProtectedRoute>
-        )}
-      />
-      <Route
-        path="/practice/assigned/:practiceId"
-        element={(
-          <ProtectedRoute>
-            <AssignedPracticePage />
-          </ProtectedRoute>
-        )}
-      />
-      <Route
-        path="/practice/:practiceId/take"
-        element={(
-          <ProtectedRoute>
-            <PracticeTakePage />
-          </ProtectedRoute>
-        )}
-      />
-      <Route
-        path="/practice/result/:attemptId"
-        element={(
-          <ProtectedRoute>
-            <PracticeResultPage />
-          </ProtectedRoute>
-        )}
-      />
-      <Route
-        path="*"
-        element={<Navigate to="/" replace />}
-      />
-    </Routes>
+    <>
+      <Routes>
+        <Route
+          path="/"
+          element={<Navigate to="/signup" replace />}
+        />
+        <Route
+          path="/signup"
+          element={(
+            <GuestRoute>
+              <SignupPage />
+            </GuestRoute>
+          )}
+        />
+        <Route
+          path="/otp"
+          element={(
+            <GuestRoute>
+              <OtpVerificationPage />
+            </GuestRoute>
+          )}
+        />
+        <Route
+          path="/login"
+          element={(
+            <GuestRoute>
+              <LoginPage />
+            </GuestRoute>
+          )}
+        />
+        <Route path="/auth/redirect" element={<AuthRedirectPage />} />
+        <Route
+          path="/forgot-password"
+          element={(
+            <GuestRoute>
+              <ForgotPasswordPage />
+            </GuestRoute>
+          )}
+        />
+        <Route
+          path="/reset-password"
+          element={(
+            <GuestRoute>
+              <ResetPasswordPage />
+            </GuestRoute>
+          )}
+        />
+        <Route
+          path="/reset-password/success"
+          element={(
+            <GuestRoute>
+              <ResetSuccessPage />
+            </GuestRoute>
+          )}
+        />
+        <Route
+          path="/dashboard"
+          element={(
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/profile-setup"
+          element={(
+            <ProtectedRoute>
+              <ProfileSetupPage />
+            </ProtectedRoute>
+          )}
+        />
+        <Route path="/settings" element={<Navigate to="/settings/profile" replace />} />
+        <Route
+          path="/settings/profile"
+          element={(
+            <ProtectedRoute>
+              <EditProfilePage />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/settings/password"
+          element={(
+            <ProtectedRoute>
+              <ChangePasswordPage />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/study-planner"
+          element={(
+            <ProtectedRoute>
+              <StudyPlannerPage />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/notifications"
+          element={(
+            <ProtectedRoute>
+              <NotificationsPage />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/practice/home"
+          element={(
+            <ProtectedRoute>
+              <PracticeHomePage />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/practice/catalog"
+          element={(
+            <ProtectedRoute>
+              <PracticeCatalogPage />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/practice/attempts"
+          element={(
+            <ProtectedRoute>
+              <PracticeAttemptsPage />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/practice/assigned/:practiceId"
+          element={(
+            <ProtectedRoute>
+              <AssignedPracticePage />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/practice/:practiceId/take"
+          element={(
+            <ProtectedRoute>
+              <PracticeTakePage />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/practice/result/:attemptId"
+          element={(
+            <ProtectedRoute>
+              <PracticeResultPage />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="*"
+          element={<Navigate to="/" replace />}
+        />
+      </Routes>
+      <PwaInstallBanner />
+    </>
   )
 }
 

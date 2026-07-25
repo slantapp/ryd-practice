@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from 'react'
 import type { BeforeInstallPromptEvent } from '../lib/pwa'
 import {
   dismissPwaPrompt,
+  isIosDevice,
   isIosSafari,
-  isMobileDevice,
   isPwaDismissed,
   isStandaloneMode,
 } from '../lib/pwa'
@@ -14,13 +14,14 @@ export function usePwaInstall() {
   const [installing, setInstalling] = useState(false)
 
   useEffect(() => {
-    if (isStandaloneMode() || isPwaDismissed() || !isMobileDevice()) {
+    if (isStandaloneMode() || isPwaDismissed()) {
       return
     }
 
     const showBanner = () => setVisible(true)
 
-    if (isIosSafari()) {
+    // iOS has no beforeinstallprompt — show Add to Home Screen instructions on all iOS browsers.
+    if (isIosDevice()) {
       showBanner()
       return
     }
@@ -31,8 +32,17 @@ export function usePwaInstall() {
       showBanner()
     }
 
+    const handleAppInstalled = () => {
+      setVisible(false)
+      setDeferredPrompt(null)
+    }
+
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+    window.addEventListener('appinstalled', handleAppInstalled)
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      window.removeEventListener('appinstalled', handleAppInstalled)
+    }
   }, [])
 
   const install = useCallback(async () => {
@@ -55,10 +65,13 @@ export function usePwaInstall() {
     setVisible(false)
   }, [])
 
+  const onIos = isIosDevice()
+
   return {
     visible,
     canInstall: Boolean(deferredPrompt),
-    showIosInstructions: isIosSafari(),
+    showIosInstructions: onIos,
+    preferSafari: onIos && !isIosSafari(),
     installing,
     install,
     dismiss,
