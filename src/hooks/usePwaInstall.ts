@@ -4,6 +4,7 @@ import {
   dismissPwaPrompt,
   isIosDevice,
   isIosSafari,
+  isMobileDevice,
   isPwaDismissed,
   isStandaloneMode,
 } from '../lib/pwa'
@@ -20,11 +21,9 @@ export function usePwaInstall() {
 
     const showBanner = () => setVisible(true)
 
-    // iOS has no beforeinstallprompt — show Add to Home Screen instructions on all iOS browsers.
-    if (isIosDevice()) {
-      showBanner()
-      return
-    }
+    // Custom bottom banner — browsers never auto-open a native install dialog.
+    // Show on every platform so login/desktop testing is visible; dismiss hides for 7 days.
+    showBanner()
 
     const handleBeforeInstallPrompt = (event: Event) => {
       event.preventDefault()
@@ -66,12 +65,15 @@ export function usePwaInstall() {
   }, [])
 
   const onIos = isIosDevice()
+  const onMobile = isMobileDevice() || onIos
 
   return {
     visible,
     canInstall: Boolean(deferredPrompt),
     showIosInstructions: onIos,
     preferSafari: onIos && !isIosSafari(),
+    showAndroidFallback: onMobile && !onIos && !deferredPrompt,
+    showDesktopFallback: !onMobile && !deferredPrompt,
     installing,
     install,
     dismiss,
