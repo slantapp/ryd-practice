@@ -15,14 +15,15 @@ export function usePwaInstall() {
   const [installing, setInstalling] = useState(false)
 
   useEffect(() => {
-    if (isStandaloneMode() || isPwaDismissed()) {
+    const onMobile = isMobileDevice() || isIosDevice()
+
+    if (!onMobile || isStandaloneMode() || isPwaDismissed()) {
       return
     }
 
     const showBanner = () => setVisible(true)
 
-    // Custom bottom banner — browsers never auto-open a native install dialog.
-    // Show on every platform so login/desktop testing is visible; dismiss hides for 7 days.
+    // Custom bottom banner for mobile devices; dismiss hides it for 7 days.
     showBanner()
 
     const handleBeforeInstallPrompt = (event: Event) => {
