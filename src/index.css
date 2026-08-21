@@ -1620,6 +1620,43 @@ button.profile-completion-submit:disabled {
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--premium-accent) 18%, transparent);
 }
 
+.practice-subscription-provider {
+  margin-top: 1.5rem;
+}
+
+.practice-subscription-provider-btn {
+  flex: 1;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: transparent;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+.practice-subscription-provider-btn.is-active {
+  border-color: #a8518a;
+  background: rgba(168, 81, 138, 0.12);
+}
+
+.practice-subscription-provider-btn.is-coming-soon {
+  cursor: not-allowed;
+  opacity: 0.55;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.practice-subscription-coming-soon {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
 .practice-subscription-loading {
   position: absolute;
   inset: 0;

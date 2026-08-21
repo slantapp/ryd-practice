@@ -37,7 +37,7 @@ interface SubscriptionContextValue {
   plansError: string | null
   billingError: string | null
   refresh: () => Promise<void>
-  startCheckout: (planKey: 'monthly' | 'annual') => Promise<void>
+  startCheckout: (planKey: 'monthly' | 'annual', provider: 'paystack' | 'stripe') => Promise<void>
   showPaywall: boolean
 }
 
@@ -171,7 +171,10 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   }, [refresh])
 
   const startCheckout = useCallback(
-    async (planKey: 'monthly' | 'annual') => {
+    async (planKey: 'monthly' | 'annual', provider: 'paystack' | 'stripe') => {
+      if (provider === 'paystack') {
+        throw new Error('Paystack is coming soon. Please use Stripe for now.')
+      }
       setCheckoutBusy(true)
       try {
         let token = getStoredRydToken()
@@ -192,9 +195,11 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         }
         await rydPracticeApi.trackSubscribeIntent()
         const origin = window.location.origin
+        const successUrl = `${origin}/dashboard?practiceSubscription=success&session_id={CHECKOUT_SESSION_ID}`
         const session = await rydPracticeApi.createCheckout({
           planKey,
-          successUrl: `${origin}/dashboard?practiceSubscription=success&session_id={CHECKOUT_SESSION_ID}`,
+          provider,
+          successUrl,
           cancelUrl: `${origin}/dashboard?practiceSubscription=cancelled`,
         })
         const url = session.checkoutUrl || session.url

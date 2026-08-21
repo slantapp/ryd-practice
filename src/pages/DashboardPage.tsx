@@ -18,6 +18,7 @@ import { PremiumAppShell } from '../components/PremiumAppShell'
 import { useAuth } from '../context/AuthContext'
 import { usePracticeSubscription } from '../context/SubscriptionContext'
 import { practiceApi } from '../lib/practiceApi'
+import { rydPracticeApi } from '../lib/rydApi'
 import type { PracticeAttemptListItem, PracticeLeaderboardResponse } from '../types'
 
 export function DashboardPage() {
@@ -29,11 +30,24 @@ export function DashboardPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (searchParams.get('practiceSubscription') === 'success') {
-      void refresh()
+    const status = searchParams.get('practiceSubscription')
+    const reference = searchParams.get('reference') || searchParams.get('trxref')
+    if (status === 'success' || reference) {
+      void (async () => {
+        if (reference) {
+          try {
+            await rydPracticeApi.confirmCheckout(reference)
+          } catch {
+            // webhook may already have fulfilled
+          }
+        }
+        await refresh()
+      })()
       const next = new URLSearchParams(searchParams)
       next.delete('practiceSubscription')
       next.delete('session_id')
+      next.delete('reference')
+      next.delete('trxref')
       setSearchParams(next, { replace: true })
     }
   }, [searchParams, setSearchParams, refresh])

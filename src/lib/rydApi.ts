@@ -68,6 +68,7 @@ export function sanitizeUserFacingMessage(message: string, fallback: string): st
     lower.includes('stripe_ai_sk') ||
     lower.includes('payments are not configured') ||
     lower.includes('stripepriceid') ||
+    lower.includes('paystack is not configured') ||
     /\bstripe\b/.test(lower)
   ) {
     if (lower.includes('not configured') || lower.includes('stripe_ai_sk')) {
@@ -207,14 +208,27 @@ export const rydPracticeApi = {
     await rydClient(true).post('/parent/practice/track/subscribe-intent', {})
   },
 
-  createCheckout: async (payload: { planKey: string; successUrl: string; cancelUrl: string }) => {
+  createCheckout: async (payload: {
+    planKey: string
+    successUrl: string
+    cancelUrl: string
+    provider: 'paystack' | 'stripe'
+  }) => {
     return rydRequest(
       () =>
-        rydClient(true).post<RydEnvelope<{ url: string; checkoutUrl: string }>>(
+        rydClient(true).post<RydEnvelope<{ url: string; checkoutUrl: string; provider?: string; reference?: string }>>(
           '/parent/practice/subscription/checkout',
           payload,
         ),
       'Could not start checkout',
+    )
+  },
+
+  confirmCheckout: async (reference: string) => {
+    return rydRequest(
+      () =>
+        rydClient(true).post<RydEnvelope<unknown>>('/parent/practice/subscription/confirm', { reference }),
+      'Could not confirm payment',
     )
   },
 

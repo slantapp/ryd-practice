@@ -41,6 +41,7 @@ export function PracticeSubscriptionModal() {
   } = usePracticeSubscription()
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const [checkoutPlan, setCheckoutPlan] = useState<'monthly' | 'annual' | null>(null)
+  const [provider, setProvider] = useState<'paystack' | 'stripe'>('stripe')
 
   if (!showPaywall) return null
 
@@ -56,7 +57,7 @@ export function PracticeSubscriptionModal() {
     setCheckoutPlan(planKey)
     const started = Date.now()
     try {
-      await startCheckout(planKey)
+      await startCheckout(planKey, provider)
     } catch (err) {
       const elapsed = Date.now() - started
       if (elapsed < 450) {
@@ -103,6 +104,35 @@ export function PracticeSubscriptionModal() {
             </h2>
             <p className="premium-text-muted mt-2 text-sm leading-relaxed">
               Subscribe for the full practice catalog, attempts, leaderboard, and study tools.
+            </p>
+          </div>
+
+          <div className="practice-subscription-provider" role="group" aria-label="Payment provider">
+            <p className="premium-text-muted mb-2 text-center text-xs font-medium uppercase tracking-wide">
+              Choose how you want to pay
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                className="practice-subscription-provider-btn is-coming-soon"
+                disabled
+                title="Paystack is coming soon"
+                aria-disabled="true"
+              >
+                <span>Paystack</span>
+                <span className="practice-subscription-coming-soon">Coming soon</span>
+              </button>
+              <button
+                type="button"
+                className={`practice-subscription-provider-btn ${provider === 'stripe' ? 'is-active' : ''}`}
+                disabled={isCheckingOut}
+                onClick={() => setProvider('stripe')}
+              >
+                Stripe
+              </button>
+            </div>
+            <p className="premium-text-muted mt-2 text-center text-xs">
+              Paystack is coming soon. Please use Stripe for now.
             </p>
           </div>
 
